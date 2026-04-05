@@ -161,138 +161,124 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white font-sans selection:bg-emerald-500/30">
-      {/* Header */}
-      <header className="bg-[#1e293b] border-b border-white/5 p-4 flex justify-between items-center sticky top-0 z-10">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <Play className="w-5 h-5 text-white fill-current" />
-          </div>
-          <h1 className="text-xl font-bold tracking-tight">Verse Ball Pool</h1>
-        </div>
-        <button 
-          onClick={() => setShowLeaderboard(true)}
-          className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full transition-colors border border-white/10"
-        >
-          <Trophy className="w-4 h-4 text-yellow-500" />
-          <span className="text-sm font-medium">Leaderboard</span>
-        </button>
-      </header>
-
-      <main className="container mx-auto px-4 py-8 flex flex-col items-center">
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
-          <div className="bg-[#1e293b] p-4 rounded-2xl border border-white/5 flex flex-col items-center">
-            <span className="text-xs uppercase tracking-widest text-slate-400 mb-1">Current Score</span>
-            <span className="text-3xl font-black text-emerald-400">{score}</span>
-          </div>
-          <div className="bg-[#1e293b] p-4 rounded-2xl border border-white/5 flex flex-col items-center">
-            <span className="text-xs uppercase tracking-widest text-slate-400 mb-1">Best Level</span>
-            <span className="text-3xl font-black text-blue-400">{highScore}</span>
-          </div>
+    <div className="min-h-screen bg-[#0b0f2a] text-white font-sans flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-[340px] bg-[#0f1440] rounded-[20px] p-5 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="m-0 text-[16px] font-bold flex items-center gap-1">
+            <Play className="w-4 h-4 fill-current text-emerald-400" />
+            Verse Ball Pool
+          </h3>
+          <button 
+            onClick={() => setShowLeaderboard(true)}
+            className="bg-[#1b2060] px-2.5 py-1.5 rounded-[10px] text-[12px] flex items-center gap-1 hover:bg-[#252b7a] transition-colors"
+          >
+            <Trophy className="w-3 h-3 text-yellow-500" />
+            Leaderboard
+          </button>
         </div>
 
-        {/* Game Area */}
-        <div className="relative group">
-          <canvas
-            ref={canvasRef}
-            width={350}
-            height={500}
-            onClick={handleCanvasClick}
-            className={`bg-[#0ea5e9]/10 rounded-3xl border-2 border-[#0ea5e9]/30 shadow-2xl shadow-[#0ea5e9]/10 cursor-crosshair transition-all duration-500 ${gameState === 'playing' ? 'scale-100 opacity-100' : 'scale-95 opacity-50 grayscale-[0.5]'}`}
-          />
-
-          {/* Overlays */}
-          <AnimatePresence>
-            {gameState === 'idle' && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
+        {/* Game Area / Card Content */}
+        <div className="bg-[#13186b] rounded-[15px] p-6 text-center relative overflow-hidden min-h-[300px] flex flex-col items-center justify-center">
+          {gameState === 'playing' ? (
+            <canvas
+              ref={canvasRef}
+              width={280}
+              height={350}
+              onClick={handleCanvasClick}
+              className="bg-black/20 rounded-xl cursor-crosshair w-full h-full absolute inset-0"
+            />
+          ) : gameState === 'idle' ? (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative z-10"
+            >
+              <h2 className="text-[22px] font-bold mb-2.5">Ready to Play?</h2>
+              <p className="text-[13px] text-[#ccc] leading-relaxed mb-5">
+                Tap the ball to keep it in the air.<br />Don't let it hit the bottom!
+              </p>
+              <button 
+                onClick={startGame}
+                className="bg-gradient-to-r from-[#00ff9c] to-[#00c8ff] border-none py-3 px-5 rounded-[25px] font-bold cursor-pointer text-black transition-transform active:scale-95 flex items-center justify-center gap-2 mx-auto"
               >
-                <div className="bg-[#1e293b]/90 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-2xl">
-                  <h2 className="text-2xl font-bold mb-2">Ready to Play?</h2>
-                  <p className="text-slate-400 text-sm mb-6">Tap the ball to keep it in the air. Don't let it hit the bottom!</p>
-                  <button 
-                    onClick={startGame}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-4 px-8 rounded-2xl shadow-lg shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2"
-                  >
-                    <Play className="w-5 h-5 fill-current" />
-                    START MISSION
-                  </button>
-                </div>
-              </motion.div>
-            )}
+                <Play className="w-4 h-4 fill-current" />
+                START MISSION
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative z-10 w-full"
+            >
+              <h2 className="text-[22px] font-bold mb-1 text-red-500">GAME OVER</h2>
+              <p className="text-[13px] text-[#ccc] mb-4">Score: <span className="text-white font-bold">{score}</span></p>
+              
+              <div className="space-y-3">
+                <input 
+                  type="text" 
+                  placeholder="Your Name" 
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#00ff9c] transition-colors"
+                />
+                <button 
+                  onClick={submitScore}
+                  className="w-full bg-gradient-to-r from-[#00ff9c] to-[#00c8ff] text-black font-bold py-2.5 rounded-xl transition-all active:scale-95"
+                >
+                  SAVE SCORE
+                </button>
+                <button 
+                  onClick={startGame}
+                  className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  TRY AGAIN
+                </button>
+              </div>
+            </motion.div>
+          )}
 
-            {gameState === 'gameOver' && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
-              >
-                <div className="bg-[#1e293b]/95 backdrop-blur-md p-8 rounded-3xl border border-red-500/30 shadow-2xl">
-                  <h2 className="text-3xl font-black text-red-500 mb-2">GAME OVER</h2>
-                  <p className="text-slate-400 text-sm mb-4">You reached level <span className="text-white font-bold">{score}</span></p>
-                  
-                  <div className="space-y-4">
-                    <input 
-                      type="text" 
-                      placeholder="Enter your name" 
-                      value={playerName}
-                      onChange={(e) => setPlayerName(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 transition-colors"
-                    />
-                    <button 
-                      onClick={submitScore}
-                      className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2"
-                    >
-                      SAVE SCORE
-                    </button>
-                    <button 
-                      onClick={startGame}
-                      className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      TRY AGAIN
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Score overlay during play */}
+          {gameState === 'playing' && (
+            <div className="absolute top-4 right-4 pointer-events-none z-20">
+              <div className="bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+                <span className="text-emerald-400 font-black">{score}</span>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Instructions */}
-        <div className="mt-8 text-slate-500 text-sm flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Tap to Bounce</span>
+        {/* Footer */}
+        <div className="mt-5 flex justify-between items-center text-[12px]">
+          <div className="flex items-center gap-1 text-slate-400">
+            <Users className="w-3 h-3" />
+            <span>Visitors: {visits}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-            <span>Avoid Bottom</span>
-          </div>
-        </div>
-      </main>
 
-      {/* Footer */}
-      <footer className="fixed bottom-0 w-full bg-[#1e293b] border-t border-white/5 p-4 flex justify-around items-center text-sm">
-        <div className="flex items-center gap-2 text-slate-400">
-          <Users className="w-4 h-4" />
-          <span>Visitors: <span className="text-white font-mono">{visits}</span></span>
+          <div className="text-center flex-1 text-[#00c8ff] font-bold">
+            <a 
+              href="https://x.com/VerseEcosystem" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              @VerseEcosystem
+            </a>
+          </div>
+
+          <a 
+            href="https://t.me/GetVerse" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#00c8ff] cursor-pointer flex items-center gap-1 hover:underline"
+          >
+            <Send className="w-3 h-3" />
+            Join Group
+          </a>
         </div>
-        <a 
-          href="https://t.me/GetVerse" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
-        >
-          <Send className="w-4 h-4" />
-          <span>Join Group</span>
-        </a>
-      </footer>
+      </div>
 
       {/* Leaderboard Modal */}
       <AnimatePresence>
